@@ -17,12 +17,23 @@ class RDiskImager
      getChoice()
   end
   
-  # make sure pv is available to use
+  # make sure programs and files RDiskImager needs are present
   def testCompatibility()
-     if (`pv --help`.split("\n")[0] != "Usage: pv [OPTION] [FILE]...")
-       puts "You need to install pv"
-       exit
-     end
+    # check that pv is installed
+    if (`pv --help`.split("\n")[0] != "Usage: pv [OPTION] [FILE]...")
+      puts "You need to install pv to use RDiskImager"
+      exit
+    end
+    # check that dd is installed
+    if(`dd --help`.split("\n")[0] != "Usage: dd [OPERAND]...")
+      puts "You need to install dd to use RDiskImager"
+      exit
+    end
+    # see if the /proc/partitions file exists
+    if(File.exist?("/proc/partitions") == false)
+      puts "/proc/partitions not found!"
+      exit
+    end
   end
   
   # find out if user wants to write a device
