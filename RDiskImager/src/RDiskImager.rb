@@ -63,7 +63,12 @@ class RDiskImager
     
     puts "Image name?"
     image_name = gets.chomp
-    system "dd if=\"/dev/#{device_name}\"| pv -s #{size}k | dd of=\"#{image_name}\""
+    puts "Are you sure you want to save an image of #{device_name} to #{image_name}? y/[n]"
+    if gets.chomp == "y"
+      system "dd if=\"/dev/#{device_name}\"| pv -s #{size}k | dd of=\"#{image_name}\""
+    else
+      puts "Cancelling operation!"
+    end
   end
   
   # Write an image to a device
@@ -74,7 +79,12 @@ class RDiskImager
     puts size
     puts "Device name? (sda, hdb, sdc, etc...)"
     device_name = gets.chomp
-    system "dd if=\"#{image_name}\"| pv -s #{size}k | dd of=\"/dev/#{device_name}\""
+    puts "Are you sure you want to write #{image_name} to #{device_name}? y/[n]"
+    if gets.chomp == "y"
+      system "dd if=\"#{image_name}\"| pv -s #{size}k | dd of=\"/dev/#{device_name}\""
+    else
+      puts "Cancelling operation!"
+    end
   end
   
 end
