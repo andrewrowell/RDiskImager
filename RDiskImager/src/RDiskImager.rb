@@ -18,6 +18,7 @@ class RDiskImager
   end
   
   # make sure programs and files RDiskImager needs are present
+  #    and that the script is being run by the root user
   def testCompatibility()
     # check that pv is installed
     if (`pv --help`.split("\n")[0] != "Usage: pv [OPTION] [FILE]...")
@@ -32,6 +33,11 @@ class RDiskImager
     # see if the /proc/partitions file exists
     if(File.exist?("/proc/partitions") == false)
       puts "/proc/partitions not found!"
+      exit
+    end
+    # check for root priveleges
+    if(`id -u`.split("\n")[0] != "0")
+      puts "Script must be run as root!"
       exit
     end
   end
