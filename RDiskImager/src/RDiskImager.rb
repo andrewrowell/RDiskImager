@@ -15,7 +15,9 @@ class RDiskImager
   def initialize()
     testArgs()
     testCompatibility()
-    getChoice()
+    while true
+      getChoice()
+    end
   end
   
   # See what command line arguments the user has set
@@ -58,13 +60,17 @@ class RDiskImager
   # find out if user wants to write a device
   #   to an image or an image to a device
   def getChoice()
-    puts "Device to Image [1]\nImage to Device [2]\n"
+    puts "Device to Image [1]\nImage to Device [2]\nExit            [3]\n"
     choice = $stdin.gets.chomp
     if choice == "1"
       deviceToImageDialog()
-    end
-    if choice == "2"
+    elsif choice == "2"
       imageToDeviceDialog()
+    elsif choice == "3"
+      puts "Exiting RDiskImager!"
+      exit
+    else
+      puts "Uknown command!"
     end
   end
   
