@@ -74,10 +74,23 @@ class RDiskImager
     end
   end
   
-  # Prompts user for the device and image names
-  def deviceToImageDialog()
+  # Ask user which device they want to use
+  def deviceNameDialog()
     puts "Device name? (sda, hdb, sdc, etc...)"
     device_name = $stdin.gets.chomp
+    return device_name
+  end
+  
+  # Ask user where they want to save the image to
+  def imageNameDialog()
+    puts "Image name?"
+    image_name = $stdin.gets.chomp
+    return image_name
+  end
+  
+  # Prompts user for the device and image names
+  def deviceToImageDialog()
+    device_name = deviceNameDialog()
         
     # read the device's size from /proc/partitions
     devtable = `cat /proc/partitions | grep "#{device_name}"`
@@ -86,8 +99,7 @@ class RDiskImager
     #   get the right number from that line
     size = devtable.split("\n")[0].split(" ")[2]
         
-    puts "Image name?"
-    image_name = $stdin.gets.chomp
+    image_name = imageNameDialog()
     puts "Are you sure you want to save an image of #{device_name} to #{image_name}? y/[n]"
     if $stdin.gets.chomp == "y"
       deviceToImage(device_name, size, image_name)
@@ -98,12 +110,10 @@ class RDiskImager
   
   # Prompts user for image and device names
   def imageToDeviceDialog()
-    puts "Image name?"
-    image_name = $stdin.gets.chomp
+    image_name = imageNameDialog()
     size = File.size(image_name)/1024
     puts size
-    puts "Device name? (sda, hdb, sdc, etc...)"
-    device_name = $stdin.gets.chomp
+    device_name = deviceNameDialog()
     puts "Are you sure you want to write #{image_name} to #{device_name}? y/[n]"
     if $stdin.gets.chomp == "y"
       imageToDevice(image_name, size, device_name)
